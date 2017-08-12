@@ -2,6 +2,7 @@
 	<div>
 		<el-table
 	  :data="page.data"
+	  height="550"
 	  style="width: 100%">
 		  <el-table-column type="expand">
 		    <template scope="props">
@@ -48,21 +49,20 @@
 </template>
 <script>
 import {mapState, mapActions, mapMutations} from "vuex"
-import {ASYNC_GET_CALL_RECORDS_BY_PAGE, SET_CUSTOMER_ID} from "./callRecordStore.js"
+import {ASYNC_GET_CALL_RECORDS_BY_PAGE, SET_CUSTOMER_ID, INIT} from "./callRecordStore.js"
 export default {
 	created() {
 		this[SET_CUSTOMER_ID](this.$route.params.customerId)
 		this[ASYNC_GET_CALL_RECORDS_BY_PAGE]()
 	},
 	destroyed() {
-		console.log("destroyed")
-		this[SET_CUSTOMER_ID]("")
+		this[INIT]()
 	},
 	computed: {
 		...mapState("callRecord", ["page", "customerId"]),
 	},
 	methods: {
-		...mapMutations("callRecord", [SET_CUSTOMER_ID]),
+		...mapMutations("callRecord", [SET_CUSTOMER_ID, INIT]),
 		...mapActions("callRecord", [ASYNC_GET_CALL_RECORDS_BY_PAGE]),		
 		handleSizeChange(val) {
       this[ASYNC_GET_CALL_RECORDS_BY_PAGE]({

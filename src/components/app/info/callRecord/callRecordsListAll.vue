@@ -1,6 +1,22 @@
 <template>
 	<div>
+		<el-form :model="form" :inline="true" >
+      <el-form-item label="联系时间">
+        <el-date-picker
+		      v-model="form.relationTime"
+		      type="date"
+		      size="small"
+		      placeholder="选择日期"
+		      @change="relationTime"
+		      >
+		    </el-date-picker>
+      </el-form-item>
+      <el-form-item>
+        <el-button @click="queryHandleClick()" size="small" type="primary" icon="search">搜索</el-button>
+      </el-form-item>
+    </el-form>
 		<el-table
+		height="550"
 	  :data="page.data"
 	  style="width: 100%">
 		  <el-table-column type="expand">
@@ -47,17 +63,24 @@
 	</div>
 </template>
 <script>
-import {mapState, mapActions} from "vuex"
-import {ASYNC_GET_CALL_RECORDS_BY_PAGE} from "./callRecordStore.js"
+import {mapState, mapActions, mapMutations} from "vuex"
+import {ASYNC_GET_CALL_RECORDS_BY_PAGE, INIT} from "./callRecordStore.js"
 export default {
 	computed: {
-		...mapState("callRecord", ["page"])
+		...mapState("callRecord", ["page", "form"])
 	},
 	mounted() {
 		this[ASYNC_GET_CALL_RECORDS_BY_PAGE]()
-		
+	},
+	destroyed() {
+		this[INIT]()
 	},
 	methods: {
+		relationTime(e) {
+			this.form.relationTime = e
+
+		},
+		...mapMutations("callRecord", [INIT]),
 		...mapActions("callRecord", [ASYNC_GET_CALL_RECORDS_BY_PAGE]),		
 		handleSizeChange(val) {
       this[ASYNC_GET_CALL_RECORDS_BY_PAGE]({
@@ -70,6 +93,12 @@ export default {
         curPage: val,
         eachPage:  this.page.eachPage
       })
+    },
+    queryHandleClick() {
+			this[ASYNC_GET_CALL_RECORDS_BY_PAGE]({
+				curPage: 1,
+				eachPage: 10
+			})
     }
 	}
 }
