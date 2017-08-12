@@ -10,7 +10,7 @@
 	      <el-submenu index="2">
 	        <template slot="title"><i class="el-icon-message"></i>沟通记录</template>
           <el-menu-item index="/info/addCustomer">新增记录</el-menu-item>
-          <el-menu-item index="/info/customerList">记录列表</el-menu-item>
+          <el-menu-item index="/info/callRecordsListAll">记录列表</el-menu-item>
 	      </el-submenu>
 	    </el-menu>
 	  </el-col>
@@ -25,7 +25,7 @@ export default {
 	name: "info",
 	data() {
 		return {
-			openArr: ["1", "2"]
+			openArr: ["1"]
 		}
 	},
 	 methods: {

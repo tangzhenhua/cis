@@ -47,22 +47,17 @@
 	</div>
 </template>
 <script>
-import {mapState, mapActions, mapMutations} from "vuex"
-import {ASYNC_GET_CALL_RECORDS_BY_PAGE, SET_CUSTOMER_ID} from "./callRecordStore.js"
+import {mapState, mapActions} from "vuex"
+import {ASYNC_GET_CALL_RECORDS_BY_PAGE} from "./callRecordStore.js"
 export default {
-	created() {
-		this[SET_CUSTOMER_ID](this.$route.params.customerId)
-		this[ASYNC_GET_CALL_RECORDS_BY_PAGE]()
-	},
-	destroyed() {
-		console.log("destroyed")
-		this[SET_CUSTOMER_ID]("")
-	},
 	computed: {
-		...mapState("callRecord", ["page", "customerId"]),
+		...mapState("callRecord", ["page"])
+	},
+	mounted() {
+		this[ASYNC_GET_CALL_RECORDS_BY_PAGE]()
+		
 	},
 	methods: {
-		...mapMutations("callRecord", [SET_CUSTOMER_ID]),
 		...mapActions("callRecord", [ASYNC_GET_CALL_RECORDS_BY_PAGE]),		
 		handleSizeChange(val) {
       this[ASYNC_GET_CALL_RECORDS_BY_PAGE]({
