@@ -78,7 +78,6 @@ export default {
 	methods: {
 		relationTime(e) {
 			this.form.relationTime = e
-
 		},
 		...mapMutations("callRecord", [INIT]),
 		...mapActions("callRecord", [ASYNC_GET_CALL_RECORDS_BY_PAGE]),		

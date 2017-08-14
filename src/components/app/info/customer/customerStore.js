@@ -2,8 +2,11 @@ export const GET_CUSTROMER_BY_PAGE = "GET_CUSTROMER_BY_PAGE"
 export const ASYNC_GET_CUSTROMER_BY_PAGE = "ASYNC_GET_CUSTROMER_BY_PAGE"
 export const SET_SHOW_TYPE = "SET_SHOW_TYPE"
 export const ASYNC_GET_CUSTROMER_BY_STATUS = "ASYNC_GET_CUSTROMER_BY_STATUS"
+export const ASYNC_GET_CUSTROMER_BY_ID = "ASYNC_GET_CUSTROMER_BY_ID"
 export const ASYNC_UPDATE_CUSTOMER_STATUS = "ASYNC_UPDATE_CUSTOMER_STATUS"
+export const ASYNC_UPDATE_CUSTOMER = "ASYNC_UPDATE_CUSTOMER"
 export const ASYNC_INSERT_CUSTOMER = "ASYNC_INSERT_CUSTOMER"
+export const ASYNC_DELETE_CURTOMER = "ASYNC_DELETE_CURTOMER"
 export const SET_STATUS = "SET_STATUS"
 export const DESTORYED = "DESTORYED"
 export const showFilters = {
@@ -57,7 +60,6 @@ export default {
 				showType: showFilters.ALL,
 				status: "-1"
 			}
-			console.log(state)
 		}
 	},
 	actions: {
@@ -100,6 +102,27 @@ export default {
 		},
 		async [ASYNC_INSERT_CUSTOMER](context, payload) {
 			const {data} = await axios.post(`${baseUrl}/customer/insertCustomer`, payload)
+			return data
+		},
+		async [ASYNC_GET_CUSTROMER_BY_ID](context, _id) {
+			const {data} = await axios.get(`${baseUrl}/customer/getCustomerByPage`, {
+				params: {
+					_id,
+					curPage: 1,
+					eachPage: 10
+				}
+			})
+			return data.data[0]
+		},
+		async [ASYNC_UPDATE_CUSTOMER](context, payload) {
+			const {data} = await axios.post(`${baseUrl}/customer/updateCustomer`, payload)
+			console.log(data)
+			return data
+		},
+		async [ASYNC_DELETE_CURTOMER](context, _id) {
+			const {data} = await axios.post(`${baseUrl}/customer/delCustomerById`, {
+				_id
+			})
 			return data
 		}
 	}

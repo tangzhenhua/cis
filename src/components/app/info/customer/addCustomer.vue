@@ -33,8 +33,8 @@ export default {
 	data() {
 			return {
 				form: {
-					name: "zhangsan",
-					capital_account: "001",
+					name: "",
+					capital_account: "",
 					phone: "",
 					status: "0"
 				},

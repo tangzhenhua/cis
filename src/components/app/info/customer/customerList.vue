@@ -60,7 +60,7 @@
           @click.native.prevent="getCallRecordsByCustomerId(scope.$index, page.data)"
           size="small">查看联系记录</el-button>
           <el-button size="small">呼出</el-button>
-          <el-button size="small">更新</el-button>
+          <el-button @click.native.prevent="updateCustomerHandleClick(scope.$index, page.data)" size="small">更新</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -98,6 +98,9 @@ export default {
     },
     updateCustomerStatus(row) {
       this[ASYNC_UPDATE_CUSTOMER_STATUS](row._id)
+    },
+    updateCustomerHandleClick(index, data) {
+      router.push(`/info/updateCustomer/${data[index]._id}`)
     },
 		getCallRecordsByCustomerId(index, rows) {
       router.push(`/info/callRecordsList/${rows[index]._id}`)

@@ -35,7 +35,6 @@ export default {
 	},
 	actions: {
 		async [ASYNC_GET_CALL_RECORDS_BY_PAGE](context, {curPage = 1, eachPage = 10} = {}) {
-			console.log(context)
 			const params = {
 				curPage,
 				eachPage
@@ -47,7 +46,6 @@ export default {
 			if(context.state.form.relationTime) {
 				params["relationTime"] = context.state.form.relationTime	
 			}
-			console.log(params)
 			const {
 				data
 			} = await axios.get("http://localhost:3001/callRecord/getCallRecordByPage", {
