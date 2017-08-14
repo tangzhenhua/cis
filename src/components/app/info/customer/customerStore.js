@@ -3,6 +3,7 @@ export const ASYNC_GET_CUSTROMER_BY_PAGE = "ASYNC_GET_CUSTROMER_BY_PAGE"
 export const SET_SHOW_TYPE = "SET_SHOW_TYPE"
 export const ASYNC_GET_CUSTROMER_BY_STATUS = "ASYNC_GET_CUSTROMER_BY_STATUS"
 export const ASYNC_UPDATE_CUSTOMER_STATUS = "ASYNC_UPDATE_CUSTOMER_STATUS"
+export const ASYNC_INSERT_CUSTOMER = "ASYNC_INSERT_CUSTOMER"
 export const SET_STATUS = "SET_STATUS"
 export const DESTORYED = "DESTORYED"
 export const showFilters = {
@@ -61,7 +62,6 @@ export default {
 	},
 	actions: {
 		async [ASYNC_GET_CUSTROMER_BY_PAGE](context, payload = {}) {
-			console.log(payload)
 			const {
 				curPage = 1,
 				eachPage = 10
@@ -97,6 +97,10 @@ export default {
 					eachPage: context.state.page.eachPage
 				})
 			}
+		},
+		async [ASYNC_INSERT_CUSTOMER](context, payload) {
+			const {data} = await axios.post(`${baseUrl}/customer/insertCustomer`, payload)
+			return data
 		}
 	}
 }
