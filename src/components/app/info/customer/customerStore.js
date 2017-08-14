@@ -1,6 +1,10 @@
 export const GET_CUSTROMER_BY_PAGE = "GET_CUSTROMER_BY_PAGE"
 export const ASYNC_GET_CUSTROMER_BY_PAGE = "ASYNC_GET_CUSTROMER_BY_PAGE"
 export const SET_SHOW_TYPE = "SET_SHOW_TYPE"
+export const ASYNC_GET_CUSTROMER_BY_STATUS = "ASYNC_GET_CUSTROMER_BY_STATUS"
+export const ASYNC_UPDATE_CUSTOMER_STATUS = "ASYNC_UPDATE_CUSTOMER_STATUS"
+export const SET_STATUS = "SET_STATUS"
+export const DESTORYED = "DESTORYED"
 export const showFilters = {
 	ALL: "all",
 	NAME: "name",
@@ -8,7 +12,7 @@ export const showFilters = {
 	PHONE: "phone"
 }
 import axios from "axios"
-
+import {baseUrl} from "../../../../config/base.js"
 export default {
 	namespaced: true,
 	state: {
@@ -23,7 +27,8 @@ export default {
 			maxPage: 0,
 			data: []
 		},
-		showType: showFilters.ALL
+		showType: showFilters.ALL,
+		status: "-1"
 	},
 	mutations: {
 		[GET_CUSTROMER_BY_PAGE](state, page) {
@@ -31,10 +36,32 @@ export default {
 		},
 		[SET_SHOW_TYPE](state, showType) {
 			state.showType = showType
+		},
+		[SET_STATUS](state, status) {
+			state.status = status
+		},
+		[DESTORYED](state) {
+			state = {
+				form: {
+					name: "",
+					capital_account: "",
+					phone: ""
+				},
+				page: {
+					curPage: 1,
+					eachPage: 10,
+					maxPage: 0,
+					data: []
+				},
+				showType: showFilters.ALL,
+				status: "-1"
+			}
+			console.log(state)
 		}
 	},
 	actions: {
 		async [ASYNC_GET_CUSTROMER_BY_PAGE](context, payload = {}) {
+			console.log(payload)
 			const {
 				curPage = 1,
 				eachPage = 10
@@ -44,16 +71,32 @@ export default {
 				eachPage
 			}
 			if(context.state.showType !== "all") {
-				params[context.state.showType] = context.state.form[context.state.showType]
+				if(context.state.showType === "status") {
+					params[context.state.showType] = context.state.status
+				} else {
+					params[context.state.showType] = context.state.form[context.state.showType]
+				}
 			}
 			const {
 				data
-			} = await axios.get("http://localhost:3001/customer/getCustomerByPage", {
+			} = await axios.get(`${baseUrl}/customer/getCustomerByPage`, {
 				params
 			})
 			data.curPage = ~~data.curPage
 			data.eachPage = ~~data.eachPage
 			context.commit(GET_CUSTROMER_BY_PAGE, data)
 		},
+		async [ASYNC_UPDATE_CUSTOMER_STATUS](context, _id) {
+			const {data} = await axios.post(`${baseUrl}/customer/updateCustomerStatus`, {
+				_id
+			})
+			if(data.ok == 1) {
+				context.dispatch({
+					type: ASYNC_GET_CUSTROMER_BY_PAGE,
+					curPage: context.state.page.curPage,
+					eachPage: context.state.page.eachPage
+				})
+			}
+		}
 	}
 }

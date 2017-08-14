@@ -23,12 +23,18 @@
       <el-form-item>
         <el-button @click="queryHandleClick('all')" size="small" type="primary" icon="search">所有</el-button>
       </el-form-item>
+      <el-form-item>
+        <el-button @click="queryHandleClick('status', '1')" size="small" type="primary" icon="search">重点客户</el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-button @click="queryHandleClick('status', '0')" size="small" type="primary" icon="search">普通客户</el-button>
+      </el-form-item>
     </el-form>
     <el-table
-      stripe
       :data="page.data"
       border
-      @cell-dblclick="test"
+      @cell-dblclick="updateCustomerStatus"
+      :row-class-name="tableRowClassName"
       style="width: 100%">
       <el-table-column
         prop="name"
@@ -70,19 +76,34 @@
   </div>
 </template>
 <script>
-import {ASYNC_GET_CUSTROMER_BY_PAGE, SET_SHOW_TYPE} from "./customerStore.js"
+import {
+  ASYNC_GET_CUSTROMER_BY_PAGE,
+  SET_SHOW_TYPE,
+  DESTORYED,
+  ASYNC_GET_CUSTROMER_BY_STATUS,
+  SET_STATUS,
+  ASYNC_UPDATE_CUSTOMER_STATUS
+} from "./customerStore.js"
 import {mapState, mapActions, mapMutations } from "vuex"
 import router from "../../../../router/index.js"
 export default {
 	methods: {
-    test() {
-      console.log("in")
+    tableRowClassName(row, index) {
+      if (row.status === "1") {
+        return 'info-row';
+      } else if (row.status === "0") {
+        return 'positive-row';
+      }
+      return '';
+    },
+    updateCustomerStatus(row) {
+      this[ASYNC_UPDATE_CUSTOMER_STATUS](row._id)
     },
 		getCallRecordsByCustomerId(index, rows) {
       router.push(`/info/callRecordsList/${rows[index]._id}`)
 		},
-    ...mapActions("customer", [ASYNC_GET_CUSTROMER_BY_PAGE]),
-    ...mapMutations("customer", [SET_SHOW_TYPE]),
+    ...mapActions("customer", [ASYNC_GET_CUSTROMER_BY_PAGE, ASYNC_GET_CUSTROMER_BY_STATUS, ASYNC_UPDATE_CUSTOMER_STATUS]),
+    ...mapMutations("customer", [SET_SHOW_TYPE, SET_STATUS, DESTORYED]),
     handleSizeChange(val) {
       const obj = {
         curPage: this.page.curPage,
@@ -103,29 +124,37 @@ export default {
       }
       this[ASYNC_GET_CUSTROMER_BY_PAGE](obj)
     },
-    queryHandleClick(key) {
-      for(let attr in this.form) {
-        if(key !== attr) {
+    queryHandleClick(key, status) {
+      for (let attr in this.form) {
+        if (key !== attr) {
           this.form[attr] = ""
         }
       }
       const obj = {
-        curPage: this.page.curPage,
-        eachPage:  this.page.eachPage
+        curPage: 1,
+        eachPage: 10
       }
-      obj[key] = this.form[key]
+      if(key === "status") {
+        obj[key] = status
+        this[SET_STATUS](status)
+      } else {
+        obj[key] = this.form[key]
+      }
       this[SET_SHOW_TYPE](key)
       this[ASYNC_GET_CUSTROMER_BY_PAGE](obj)
     }
 	},
-	created() {
+	mounted() {
 		this[ASYNC_GET_CUSTROMER_BY_PAGE]({
       curPage: this.page.curPage,
       eachPage: this.page.eachPage
     })
 	},
+  destroyed() {
+    this[DESTORYED]()
+  },
 	computed: {
-		...mapState("customer", ["page", "showType", "form"])
+		...mapState("customer", ["page", "showType", "form", "status"])
 	}
 }
 </script>
