@@ -54,7 +54,7 @@ export default {
             { required: true, message: '请输入资金账号', trigger: 'blur' },
           ],
           phone: [
-          	{ type: 'number', message: '手机号码必须为数字'},
+          	{ required: true, message: '请输入手机号码'},
           ]
         }
 			}

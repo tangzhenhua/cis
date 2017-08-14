@@ -1,10 +1,11 @@
 export const GET_CALL_RECORDS_BY_PAGE = "GET_CALL_RECORDS_BY_PAGE"
 export const ASYNC_GET_CALL_RECORDS_BY_PAGE = "ASYNC_GET_CALL_RECORDS_BY_PAGE"
+export const ASYNC_ADD_CALL_RECORDS = "ASYNC_ADD_CALL_RECORDS"
 export const SET_CUSTOMER_ID = "SET_CUSTOMER_ID"
 export const INIT = "INIT"
 
 import axios from "axios"
-
+import {baseUrl} from "../../../../config/base.js"
 const initData = {
 	page: {
 		curPage: 1,
@@ -48,13 +49,17 @@ export default {
 			}
 			const {
 				data
-			} = await axios.get("http://localhost:3001/callRecord/getCallRecordByPage", {
+			} = await axios.get(`${baseUrl}/callRecord/getCallRecordByPage`, {
 				params
 			})
 
 			data.curPage = ~~data.curPage
 			data.eachPage = ~~data.eachPage
 			context.commit(GET_CALL_RECORDS_BY_PAGE, data)
+		},
+		async [ASYNC_ADD_CALL_RECORDS](context, payload) {
+			const {data} = await axios.post(`${baseUrl}/callRecord/addCallRecord`, payload)
+			return data
 		}
 	}
 }

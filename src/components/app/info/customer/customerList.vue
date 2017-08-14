@@ -59,7 +59,9 @@
           <el-button 
           @click.native.prevent="getCallRecordsByCustomerId(scope.$index, page.data)"
           size="small">查看联系记录</el-button>
-          <el-button size="small">呼出</el-button>
+          <el-button 
+          @click.native.prevent="addCallRecord(scope.$index, page.data)"
+          size="small">呼出</el-button>
           <el-button @click.native.prevent="updateCustomerHandleClick(scope.$index, page.data)" size="small">更新</el-button>
         </template>
       </el-table-column>
@@ -88,11 +90,12 @@ import {mapState, mapActions, mapMutations } from "vuex"
 import router from "../../../../router/index.js"
 export default {
 	methods: {
+    addCallRecord(index, data) {
+      router.push(`/info/addCallRecord/${data[index]._id}`)
+    },
     tableRowClassName(row, index) {
       if (row.status === "1") {
         return 'info-row';
-      } else if (row.status === "0") {
-        return 'positive-row';
       }
       return '';
     },
@@ -165,7 +168,6 @@ export default {
   .el-table .info-row {
     background: #c9e5f5;
   }
-
   .el-table .positive-row {
     background: #e2f0e4;
   }
