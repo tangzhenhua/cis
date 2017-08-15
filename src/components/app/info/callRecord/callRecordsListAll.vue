@@ -50,6 +50,14 @@
 		    label="联系时间"
 		    prop="relation_time">
 		  </el-table-column>
+		   <el-table-column
+        fixed="right"
+        label="操作"
+        >
+        <template scope="scope">
+          <el-button type="danger" @click.native.prevent="del(scope.$index, page.data)" size="small">删除</el-button>
+        </template>
+      </el-table-column>
 		</el-table>
 		<el-pagination
       @size-change="handleSizeChange"
@@ -64,7 +72,7 @@
 </template>
 <script>
 import {mapState, mapActions, mapMutations} from "vuex"
-import {ASYNC_GET_CALL_RECORDS_BY_PAGE, INIT} from "./callRecordStore.js"
+import {ASYNC_GET_CALL_RECORDS_BY_PAGE, INIT, ASYNC_REMOVE_CALL_RECORD} from "./callRecordStore.js"
 export default {
 	computed: {
 		...mapState("callRecord", ["page", "form"])
@@ -76,11 +84,14 @@ export default {
 		this[INIT]()
 	},
 	methods: {
+		del(index, data) {
+			this[ASYNC_REMOVE_CALL_RECORD](data[index]._id)
+		},
 		relationTime(e) {
 			this.form.relationTime = e
 		},
 		...mapMutations("callRecord", [INIT]),
-		...mapActions("callRecord", [ASYNC_GET_CALL_RECORDS_BY_PAGE]),		
+		...mapActions("callRecord", [ASYNC_GET_CALL_RECORDS_BY_PAGE, ASYNC_REMOVE_CALL_RECORD]),	
 		handleSizeChange(val) {
       this[ASYNC_GET_CALL_RECORDS_BY_PAGE]({
         curPage: this.page.curPage,

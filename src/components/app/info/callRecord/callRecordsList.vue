@@ -35,6 +35,14 @@
 		    label="联系时间"
 		    prop="relation_time">
 		  </el-table-column>
+		   <el-table-column
+        fixed="right"
+        label="操作"
+        >
+        <template scope="scope">
+          <el-button type="warning" @click.native.prevent="update(scope.$index, page.data)" size="small">更新</el-button>
+        </template>
+      </el-table-column>
 		</el-table>
 		<el-pagination
       @size-change="handleSizeChange"
@@ -49,7 +57,8 @@
 </template>
 <script>
 import {mapState, mapActions, mapMutations} from "vuex"
-import {ASYNC_GET_CALL_RECORDS_BY_PAGE, SET_CUSTOMER_ID, INIT} from "./callRecordStore.js"
+import {ASYNC_GET_CALL_RECORDS_BY_PAGE, SET_CUSTOMER_ID, INIT, ASYNC_REMOVE_CALL_RECORD} from "./callRecordStore.js"
+import router from "../../../../router/index.js"
 export default {
 	created() {
 		this[SET_CUSTOMER_ID](this.$route.params.customerId)
@@ -62,8 +71,11 @@ export default {
 		...mapState("callRecord", ["page", "customerId"]),
 	},
 	methods: {
+		update(index, data) {
+			router.push(`/info/updateCallRecord/${data[index]._id}`)
+		},
 		...mapMutations("callRecord", [SET_CUSTOMER_ID, INIT]),
-		...mapActions("callRecord", [ASYNC_GET_CALL_RECORDS_BY_PAGE]),		
+		...mapActions("callRecord", [ASYNC_GET_CALL_RECORDS_BY_PAGE, ASYNC_REMOVE_CALL_RECORD]),		
 		handleSizeChange(val) {
       this[ASYNC_GET_CALL_RECORDS_BY_PAGE]({
         curPage: this.page.curPage,

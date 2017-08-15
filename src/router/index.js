@@ -10,7 +10,7 @@ import CallRecordsList from "../components/app/info/callRecord/callRecordsList.v
 import CallRecordsListAll from "../components/app/info/callRecord/callRecordsListAll.vue"
 import UpdateCustomer from "../components/app/info/customer/updateCustomer.vue"
 import AddCallRecord from "../components/app/info/callRecord/addCallRecord.vue"
-
+import UpdateCallRecord from "../components/app/info/callRecord/updateCallRecord.vue"
 Vue.use(Router)
 export default new Router({
 	routes: [{
@@ -51,6 +51,10 @@ export default new Router({
 			path: "updateCustomer/:customerId",
 			name: "updateCustomer",
 			component: UpdateCustomer
+		}, {
+			path: "updateCallRecord/:_id",
+			name: "updateCallRecord",
+			component: UpdateCallRecord
 		}, {
 			path: "callRecordsList/:customerId",
 			name: "callRecordsList",

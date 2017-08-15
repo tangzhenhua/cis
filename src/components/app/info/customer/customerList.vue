@@ -57,12 +57,16 @@
         >
         <template scope="scope">
           <el-button 
+          type="success"
           @click.native.prevent="getCallRecordsByCustomerId(scope.$index, page.data)"
           size="small">查看联系记录</el-button>
-          <el-button 
+          <el-button
+          type="info"
           @click.native.prevent="addCallRecord(scope.$index, page.data)"
           size="small">呼出</el-button>
-          <el-button @click.native.prevent="updateCustomerHandleClick(scope.$index, page.data)" size="small">更新</el-button>
+          <el-button
+          type="danger" 
+          @click.native.prevent="updateCustomerHandleClick(scope.$index, page.data)" size="small">更新</el-button>
         </template>
       </el-table-column>
     </el-table>
