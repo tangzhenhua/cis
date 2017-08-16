@@ -40,8 +40,8 @@ export default {
 			form: {
 				customerId: '0',
 				relationTime: "",
-				customerSituation: "1",
-				communicationSituation: "1"
+				customerSituation: "",
+				communicationSituation: ""
 			},
 			rules: {
         customerSituation: [

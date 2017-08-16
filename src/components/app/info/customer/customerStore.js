@@ -79,6 +79,7 @@ export default {
 					params[context.state.showType] = context.state.form[context.state.showType]
 				}
 			}
+			console.log(params)
 			const {
 				data
 			} = await axios.get(`${baseUrl}/customer/getCustomerByPage`, {

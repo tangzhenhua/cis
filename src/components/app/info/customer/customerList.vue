@@ -29,6 +29,24 @@
       <el-form-item>
         <el-button @click="queryHandleClick('status', '0')" size="small" type="primary" icon="search">普通客户</el-button>
       </el-form-item>
+      <el-form-item>
+        <el-select :value="value" size="small" placeholder="请选择">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-upload
+          class="upload-demo"
+          :action="action"
+          >
+          <el-button size="small" type="primary">点击上传</el-button>
+        </el-upload>
+      </el-form-item>
     </el-form>
     <el-table
       :data="page.data"
@@ -92,7 +110,27 @@ import {
 } from "./customerStore.js"
 import {mapState, mapActions, mapMutations } from "vuex"
 import router from "../../../../router/index.js"
+import {baseUrl} from "@/config/base.js"
 export default {
+  data() {
+    return {
+      action: `${baseUrl}/files/upload`,
+      options: [{
+        value: "0",
+        label: "普通客户"
+      }, {
+        value: "1",
+        label: "重点客户"
+      }, {
+        value: "2",
+        label: "持续跟踪"
+      }, {
+        value: "3",
+        label: "放弃客户"
+      }],
+      value: "0"
+    }
+  },
 	methods: {
     addCallRecord(index, data) {
       router.push(`/info/addCallRecord/${data[index]._id}`)
